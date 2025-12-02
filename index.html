@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Animal Farm: Legacy of the Revolution</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto+Slab:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loader">
+            <div class="pig-icon">🐷</div>
+            <div class="loading-text">Revolution Loading...</div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-container" class="hidden">
+        <!-- Header with Metrics -->
+        <header id="game-header">
+            <div class="season-display">
+                <span id="season-text">Spring</span>
+                <span id="year-text">Year 1</span>
+                <div class="turn-counter">Turn: <span id="turn-count">1</span></div>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-item" data-metric="loyalty">
+                    <div class="metric-label">Loyalty</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 75%"></div>
+                    </div>
+                    <div class="metric-value">75</div>
+                </div>
+                <div class="metric-item" data-metric="rations">
+                    <div class="metric-label">Rations</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 50%"></div>
+                    </div>
+                    <div class="metric-value">50</div>
+                </div>
+                <div class="metric-item" data-metric="security">
+                    <div class="metric-label">Security</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 30%"></div>
+                    </div>
+                    <div class="metric-value">30</div>
+                </div>
+                <div class="metric-item" data-metric="corruption">
+                    <div class="metric-label">Corruption</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 5%"></div>
+                    </div>
+                    <div class="metric-value">5</div>
+                </div>
+                <div class="metric-item" data-metric="innovation">
+                    <div class="metric-label">Innovation</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 10%"></div>
+                    </div>
+                    <div class="metric-value">10</div>
+                </div>
+                <div class="metric-item" data-metric="historical-truth">
+                    <div class="metric-label">Historical Truth</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 95%"></div>
+                    </div>
+                    <div class="metric-value">95</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Game Area -->
+        <main id="game-main">
+            <div id="scene-viewport">
+                <!-- Dynamic Background -->
+                <div id="background-layer" class="parallax-layer">
+                    <div class="background-element" data-season="spring"></div>
+                    <div class="background-element" data-season="summer"></div>
+                    <div class="background-element" data-season="autumn"></div>
+                    <div class="background-element" data-season="winter"></div>
+                </div>
+
+                <!-- Interactive Farm Map -->
+                <div id="farm-map" class="hidden">
+                    <div class="map-grid">
+                        <div class="map-tile barn" data-location="barn">Barn</div>
+                        <div class="map-tile windmill" data-location="windmill">Windmill</div>
+                        <div class="map-tile commandments" data-location="commandments">Commandments</div>
+                        <div class="map-tile fields" data-location="fields">Fields</div>
+                        <div class="map-tile farmhouse" data-location="farmhouse">Farmhouse</div>
+                    </div>
+                </div>
+
+                <!-- Character Display -->
+                <div id="character-layer">
+                    <div class="character-container">
+                        <div class="character-sprite" id="main-character">
+                            <img src="assets/sprites/napoleon/neutral.png" alt="Character">
+                            <div class="speech-bubble hidden" id="speech-bubble">
+                                <div class="bubble-text"></div>
+                                <div class="bubble-arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dialogue-box" id="dialogue-box">
+                        <div class="dialogue-text" id="dialogue-text"></div>
+                        <div class="dialogue-choices" id="dialogue-choices"></div>
+                        <div class="dialogue-continue hidden" id="dialogue-continue">
+                            <button class="continue-btn">Continue <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decision Interface -->
+                <div id="decision-layer" class="hidden">
+                    <div class="decision-header">
+                        <h3 id="decision-title">Decision Time</h3>
+                        <div class="cost-benefit-preview" id="cost-benefit-preview"></div>
+                    </div>
+                    <div class="decision-options" id="decision-options"></div>
+                </div>
+
+                <!-- Narrative Display -->
+                <div id="narrative-layer">
+                    <div class="narrative-text" id="narrative-text"></div>
+                    <div class="narrative-progress">
+                        <div class="progress-dots" id="progress-dots"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer with Action Log -->
+        <footer id="game-footer">
+            <div class="action-log">
+                <h3><i class="fas fa-scroll"></i> Revolution Log</h3>
+                <div class="log-entries" id="log-entries">
+                    <div class="log-entry">Year 1, Spring: Revolution begins...</div>
+                </div>
+                <div class="log-controls">
+                    <button id="log-prev"><i class="fas fa-chevron-up"></i></button>
+                    <button id="log-next"><i class="fas fa-chevron-down"></i></button>
+                </div>
+            </div>
+            
+            <div class="quick-actions">
+                <button id="btn-map" class="quick-btn" title="Travel Map">
+                    <i class="fas fa-map"></i>
+                </button>
+                <button id="btn-decisions" class="quick-btn" title="Make Decisions">
+                    <i class="fas fa-clipboard-list"></i>
+                </button>
+                <button id="btn-talk" class="quick-btn" title="Talk to Animals">
+                    <i class="fas fa-comments"></i>
+                </button>
+                <button id="btn-sound" class="quick-btn" title="Toggle Sound">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+            </div>
+        </footer>
+
+        <!-- Audio Elements -->
+        <audio id="bgm" loop>
+            <source src="assets/sounds/music/theme.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="animal-sound"></audio>
+        <audio id="ui-sound"></audio>
+        <audio id="narrative-sound"></audio>
+    </div>
+
+    <!-- Scripts -->
+    <script src="scripts/gameState.js"></script>
+    <script src="scripts/characterSystem.js"></script>
+    <script src="scripts/decisionSystem.js"></script>
+    <script src="scripts/narrativeEngine.js"></script>
+    <script src="scripts/uiManager.js"></script>
+    <script src="scripts/audioManager.js"></script>
+    <script src="scripts/farmMap.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>

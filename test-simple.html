@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Farm - Complete Test</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1e392a 0%, #2c5530 100%);
+            color: #f5f5dc;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(30, 57, 42, 0.95);
+            border: 3px solid #e65100;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+        }
+        
+        h1 {
+            color: #e65100;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            border-bottom: 2px solid #e65100;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .game-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .season-display {
+            text-align: center;
+            font-size: 2em;
+            padding: 15px;
+            background: rgba(230, 81, 0, 0.2);
+            border-radius: 8px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .metric-item {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #4e342e;
+        }
+        
+        .metric-label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-bar {
+            height: 8px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .metric-fill {
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+        
+        .game-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .narrative-box {
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e65100;
+            min-height: 300px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        .narrative-text {
+            min-height: 250px;
+        }
+        
+        .decision-box {
+            background: rgba(78, 52, 46, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e65100;
+        }
+        
+        .decision-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .decision-option {
+            background: rgba(30, 57, 42, 0.8);
+            border: 2px solid transparent;
+            border-radius: 5px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .decision-option:hover {
+            border-color: #e65100;
+            background: rgba(30, 57, 42, 1);
+            transform: translateX(5px);
+        }
+        
+        .decision-title {
+            color: #e65100;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+        
+        .decision-costs, .decision-benefits {
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .cost { color: #ff6b6b; }
+        .benefit { color: #4CAF50; }
+        
+        .log-box {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #4e342e;
+        }
+        
+        .log-entry {
+            padding: 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9em;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #4e342e;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: #e65100;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+        }
+        
+        button:hover {
+            background: #ff6b00;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button.secondary {
+            background: #4e342e;
+        }
+        
+        button.secondary:hover {
+            background: #5d4037;
+        }
+        
+        button.danger {
+            background: #c62828;
+        }
+        
+        button.danger:hover {
+            background: #d32f2f;
+        }
+        
+        .epoch-indicator {
+            display: inline-block;
+            background: #e65100;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .character-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        
+        .character-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #4e342e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            border: 2px solid #e65100;
+        }
+        
+        .character-text {
+            flex: 1;
+            font-style: italic;
+            color: #ffcc80;
+        }
+        
+        @media (max-width: 768px) {
+            .game-header {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .game-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Animal Farm: Legacy of the Revolution <span class="epoch-indicator" id="epoch-indicator">Epoch 0</span></h1>
+        
+        <div class="game-header">
+            <div class="season-display">
+                <span id="season">Spring</span>, <span id="year">Year 1</span>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-label">
+                        <span>Loyalty</span>
+                        <span id="loyalty-value">75</span>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" id="loyalty-bar" style="width: 75%; background: #4CAF50;"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-label">
+                        <span>Rations</span>
+                        <span id="rations-value">50</span>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" id="rations-bar" style="width: 50%; background: #FF9800;"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-label">
+                        <span>Security</span>
+                        <span id="security-value">30</span>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" id="security-bar" style="width: 30%; background: #F44336;"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-label">
+                        <span>Corruption</span>
+                        <span id="corruption-value">5</span>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" id="corruption-bar" style="width: 5%; background: #9C27B0;"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-label">
+                        <span>Innovation</span>
+                        <span id="innovation-value">10</span>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" id="innovation-bar" style="width: 10%; background: #2196F3;"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-label">
+                        <span>Hist. Truth</span>
+                        <span id="truth-value">95</span>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" id="truth-bar" style="width: 95%; background: #FFEB3B;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-content">
+            <div class="narrative-box">
+                <h2>Narrative</h2>
+                <div id="narrative-text">
+                    MANOR FARM, ENGLAND. 1945.<br><br>
+                    Old Major's dream has become reality. The humans are gone, driven out by the united animals. 
+                    The farm belongs to those who work it. You stand in the barn, now called "ANIMAL FARM." 
+                    The Seven Commandments gleam on the wall, freshly painted. The animals look to you - one of the pigs, 
+                    the natural leaders - to guide this new society.
+                </div>
+                
+                <div class="character-display" id="character-display">
+                    <div class="character-image">🐷</div>
+                    <div class="character-text" id="character-text">
+                        "All animals are equal, but some animals are more equal than others."
+                    </div>
+                </div>
+            </div>
+            
+            <div class="decision-box" id="decision-box">
+                <h2>Current Decision</h2>
+                <div id="decision-title">No decision pending</div>
+                <div class="decision-options" id="decision-options"></div>
+                <div id="decision-description"></div>
+            </div>
+        </div>
+        
+        <div class="log-box">
+            <h3>Action Log</h3>
+            <div id="log-entries">
+                <div class="log-entry">Year 1, Spring: Revolution begins. The animals have taken control of Manor Farm.</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="nextSeason()">Next Season</button>
+            <button onclick="skipToEpoch(1)" class="secondary">Trigger Epoch 1: Windmill Debate</button>
+            <button onclick="skipToEpoch(2)" class="secondary">Trigger Epoch 2: Purges</button>
+            <button onclick="skipToEpoch(3)" class="secondary">Trigger Epoch 3: Commandments</button>
+            <button onclick="skipToEpoch(4)" class="secondary">Trigger Epoch 4: Boxer's Fate</button>
+            <button onclick="skipToEpoch(5)" class="secondary">Trigger Epoch 5: Human Visitors</button>
+            <button onclick="checkEndgame()" class="danger">Check Endgame</button>
+            <button onclick="resetGame()" class="danger">Reset Game</button>
+        </div>
+        
+        <div id="endgame-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+            <div style="background: #1e392a; padding: 30px; border-radius: 10px; border: 3px solid #e65100; max-width: 600px; text-align: center;">
+                <h2 id="endgame-title" style="color: #e65100;">Ending Achieved!</h2>
+                <div id="endgame-text" style="margin: 20px 0; font-size: 1.2em; line-height: 1.6;"></div>
+                <button onclick="hideEndgame()" style="padding: 10px 30px;">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Complete Game State
+        const gameState = {
+            // Core Metrics
+            loyalty: 75,
+            rations: 50,
+            security: 30,
+            corruption: 5,
+            innovation: 10,
+            historicalTruth: 95,
+            
+            // Time & Seasons
+            season: 'Spring',
+            year: 1,
+            turn: 1,
+            
+            // Flags & Progress
+            boxerSaved: false,
+            boxerInjured: false,
+            commandmentsRevised: false,
+            purgesCompleted: false,
+            windmillBuilt: false,
+            humanVisitors: false,
+            
+            // Current Decision
+            currentDecision: null,
+            currentEpoch: 0,
+            
+            // Action Log
+            actionLog: ['Year 1, Spring: Revolution begins. The animals have taken control of Manor Farm.']
+        };
+        
+        const seasonOrder = ['Spring', 'Summer', 'Autumn', 'Winter'];
+        const seasons = ['Spring', 'Summer', 'Autumn', 'Winter'];
+        
+        // All Major Decisions (Epochs)
+        const decisions = {
+            // Year 1: The Great Windmill Debate
+            epoch1: {
+                title: 'The Great Windmill Debate',
+                description: 'How should we approach the windmill construction?',
+                year: 1,
+                season: 'Spring',
+                options: [
+                    {
+                        id: 'speed',
+                        title: 'Maximum Speed',
+                        description: 'Push the animals hard to complete quickly. Show progress.',
+                        costs: { fatigue: 30, rations: -10, loyalty: -5 },
+                        benefits: { innovation: 20, security: 10 },
+                        narrative: 'You push for maximum speed. The animals work day and night.'
+                    },
+                    {
+                        id: 'safety',
+                        title: 'Safety First',
+                        description: 'Prioritize animal welfare and safe conditions.',
+                        costs: { innovation: -5, rations: -5 },
+                        benefits: { loyalty: 15, historicalTruth: 5 },
+                        narrative: 'You prioritize safety. The animals appreciate the concern.'
+                    },
+                    {
+                        id: 'compromise',
+                        title: 'Balanced Approach',
+                        description: 'Find middle ground between speed and safety.',
+                        costs: { fatigue: 20, rations: -5 },
+                        benefits: { innovation: 10, loyalty: 5, security: 5 },
+                        narrative: 'You choose a balanced approach. Progress is steady but slow.'
+                    }
+                ]
+            },
+            
+            // Year 2: The Purges & Show Trials
+            epoch2: {
+                title: 'The Purges & Show Trials',
+                description: 'Discontent is growing. Who should be made an example?',
+                year: 2,
+                season: 'Autumn',
+                options: [
+                    {
+                        id: 'sheep',
+                        title: 'Accuse the Sheep',
+                        description: 'Blame the mindless followers.',
+                        costs: { loyalty: -20, historicalTruth: -25 },
+                        benefits: { security: 40, corruption: 20 },
+                        narrative: 'The sheep are accused. They bleat in confusion as the dogs circle.'
+                    },
+                    {
+                        id: 'chickens',
+                        title: 'Accuse the Chickens',
+                        description: 'Their egg production has been lacking.',
+                        costs: { loyalty: -15, rations: -10, historicalTruth: -20 },
+                        benefits: { security: 30, corruption: 15 },
+                        narrative: 'The chickens are executed for egg hoarding.'
+                    },
+                    {
+                        id: 'scapegoat',
+                        title: 'Create a Scapegoat',
+                        description: 'Invent a traitor working with Snowball.',
+                        costs: { loyalty: -25, historicalTruth: -30 },
+                        benefits: { security: 20, corruption: 25 },
+                        narrative: 'You invent a traitor. The animals believe the lie.'
+                    }
+                ]
+            },
+            
+            // Year 3: Commandment Revision
+            epoch3: {
+                title: 'Commandment Revision',
+                description: 'Which original commandment should be revised?',
+                year: 3,
+                season: 'Summer',
+                options: [
+                    {
+                        id: 'no_beds',
+                        title: 'No animal shall sleep in a bed',
+                        description: 'Revise to: "No animal shall sleep in a bed with sheets"',
+                        costs: { historicalTruth: -50, loyalty: -15 },
+                        benefits: { corruption: 95, security: 10 },
+                        narrative: 'The pigs begin sleeping in the farmhouse beds.'
+                    },
+                    {
+                        id: 'no_alcohol',
+                        title: 'No animal shall drink alcohol',
+                        description: 'Revise to: "No animal shall drink alcohol to excess"',
+                        costs: { historicalTruth: -50, loyalty: -20 },
+                        benefits: { corruption: 95, security: 5 },
+                        narrative: 'Whiskey bottles appear in the farmhouse.'
+                    },
+                    {
+                        id: 'no_killing',
+                        title: 'No animal shall kill another animal',
+                        description: 'Revise to: "No animal shall kill another animal without cause"',
+                        costs: { historicalTruth: -50, loyalty: -25 },
+                        benefits: { corruption: 95, security: 15 },
+                        narrative: 'The dogs\' violence is now justified.'
+                    }
+                ]
+            },
+            
+            // Year 4: Boxer's Fate
+            epoch4: {
+                title: 'Boxer\'s Fate',
+                description: 'Boxer is injured and cannot work. What is to be done?',
+                year: 4,
+                season: 'Summer',
+                options: [
+                    {
+                        id: 'save_rations',
+                        title: 'Save with Rations',
+                        description: 'Use food reserves to nurse him back.',
+                        costs: { rations: -75 },
+                        benefits: { loyalty: 25 },
+                        requirements: { rations: 75 },
+                        narrative: 'You save Boxer with precious food. He recovers gratefully.'
+                    },
+                    {
+                        id: 'save_loyalty',
+                        title: 'Save with Loyalty',
+                        description: 'Mobilize animals to care for him collectively.',
+                        costs: { loyalty: -40 },
+                        benefits: {},
+                        requirements: { loyalty: 90 },
+                        narrative: 'The animals work extra to care for Boxer.'
+                    },
+                    {
+                        id: 'sacrifice',
+                        title: 'Send to Knacker\'s',
+                        description: 'Boxer is no longer useful. Sell him.',
+                        costs: { loyalty: -25, historicalTruth: -10 },
+                        benefits: { rations: 30, security: 10, corruption: 20 },
+                        narrative: 'The van arrives. Boxer looks confused as he\'s loaded.'
+                    }
+                ]
+            },
+            
+            // Year 5: The Human Visitors
+            epoch5: {
+                title: 'The Human Visitors',
+                description: 'Which human farmer should we trade with?',
+                year: 5,
+                season: 'Winter',
+                options: [
+                    {
+                        id: 'pilkington',
+                        title: 'Mr. Pilkington',
+                        description: 'Trade for better rations and supplies.',
+                        costs: { security: -20, historicalTruth: -15 },
+                        benefits: { rations: 40, corruption: 10 },
+                        narrative: 'Pilkington brings grain and medicine. He eyes the farmhouse.'
+                    },
+                    {
+                        id: 'frederick',
+                        title: 'Mr. Frederick',
+                        description: 'Trade for advanced machinery and technology.',
+                        costs: { security: -15, rations: -10 },
+                        benefits: { innovation: 30, corruption: 15 },
+                        narrative: 'Frederick brings strange machines. "Progress requires tools," he says.'
+                    },
+                    {
+                        id: 'neither',
+                        title: 'Reject Both',
+                        description: 'We are self-sufficient. No dealings with humans.',
+                        costs: { rations: -20, loyalty: -10 },
+                        benefits: { historicalTruth: 10, security: 5 },
+                        narrative: 'You send the humans away. The animals cheer.'
+                    }
+                ]
+            },
+            
+            // Seasonal Decisions
+            seasonal: {
+                spring: {
+                    title: 'Spring Planting Strategy',
+                    description: 'How should we approach this year\'s planting?',
+                    options: [
+                        {
+                            id: 'intensive',
+                            title: 'Intensive Farming',
+                            description: 'Plant every available inch for maximum yield.',
+                            costs: { fatigue: 15, loyalty: -5 },
+                            benefits: { rations: 25 }
+                        },
+                        {
+                            id: 'sustainable',
+                            title: 'Sustainable Farming',
+                            description: 'Rotate crops and maintain soil health.',
+                            costs: { fatigue: 5, rations: -5 },
+                            benefits: { innovation: 10, loyalty: 5 }
+                        }
+                    ]
+                },
+                summer: {
+                    title: 'Summer Labor Allocation',
+                    description: 'How should we manage the peak labor season?',
+                    options: [
+                        {
+                            id: 'overtime',
+                            title: 'Mandatory Overtime',
+                            description: 'Everyone works longer hours.',
+                            costs: { fatigue: 25, loyalty: -10 },
+                            benefits: { rations: 20, security: 5 }
+                        },
+                        {
+                            id: 'shifts',
+                            title: 'Organized Shifts',
+                            description: 'Implement a fair shift system.',
+                            costs: { fatigue: 10 },
+                            benefits: { loyalty: 10, innovation: 5 }
+                        }
+                    ]
+                }
+            }
+        };
+        
+        // Character Dialogues
+        const characters = {
+            napoleon: {
+                name: 'Napoleon',
+                icon: '🐷',
+                quotes: [
+                    "The farm is prospering under my leadership.",
+                    "Discipline is necessary for the revolution to succeed.",
+                    "Snowball was a traitor from the beginning.",
+                    "The dogs are for your protection, comrades."
+                ]
+            },
+            snowball: {
+                name: 'Snowball',
+                icon: '🐖',
+                quotes: [
+                    "My windmill plans would have brought electricity to all!",
+                    "Napoleon has betrayed the revolution's principles.",
+                    "Education is key to preventing tyranny.",
+                    "The animals must understand their rights."
+                ]
+            },
+            boxer: {
+                name: 'Boxer',
+                icon: '🐴',
+                quotes: [
+                    "I will work harder!",
+                    "Napoleon is always right.",
+                    "The farm is my home.",
+                    "My strength is for the revolution."
+                ]
+            },
+            squealer: {
+                name: 'Squealer',
+                icon: '🐽',
+                quotes: [
+                    "Comrades, let me explain the recent decisions...",
+                    "The rations reduction is actually an increase, mathematically speaking.",
+                    "Historical records show Napoleon's wisdom.",
+                    "Trust in the leadership, comrades."
+                ]
+            },
+            animals: {
+                name: 'The Animals',
+                icon: '🐑',
+                quotes: [
+                    "Four legs good, two legs bad!",
+                    "We're hungry...",
+                    "The windmill would have helped.",
+                    "Remember Old Major's dream?"
+                ]
+            }
+        };
+        
+        // Update UI
+        function updateUI() {
+            // Update metrics
+            document.getElementById('loyalty-value').textContent = gameState.loyalty;
+            document.getElementById('loyalty-bar').style.width = gameState.loyalty + '%';
+            
+            document.getElementById('rations-value').textContent = gameState.rations;
+            document.getElementById('rations-bar').style.width = gameState.rations + '%';
+            
+            document.getElementById('security-value').textContent = gameState.security;
+            document.getElementById('security-bar').style.width = gameState.security + '%';
+            
+            document.getElementById('corruption-value').textContent = gameState.corruption;
+            document.getElementById('corruption-bar').style.width = gameState.corruption + '%';
+            
+            document.getElementById('innovation-value').textContent = gameState.innovation;
+            document.getElementById('innovation-bar').style.width = gameState.innovation + '%';
+            
+            document.getElementById('truth-value').textContent = gameState.historicalTruth;
+            document.getElementById('truth-bar').style.width = gameState.historicalTruth + '%';
+            
+            // Update season/year
+            document.getElementById('season').textContent = gameState.season;
+            document.getElementById('year').textContent = `Year ${gameState.year}`;
+            document.getElementById('epoch-indicator').textContent = `Epoch ${gameState.currentEpoch}`;
+            
+            // Update narrative
+            updateNarrative();
+            
+            // Update log
+            updateLog();
+            
+            // Check for epoch triggers
+            checkEpochTriggers();
+            
+            // Random character dialogue
+            showRandomCharacterDialogue();
+        }
+        
+        function updateNarrative() {
+            const narrativeText = document.getElementById('narrative-text');
+            const season = gameState.season;
+            const year = gameState.year;
+            
+            const narratives = {
+                Spring: `SPRING, YEAR ${year}. The first thaw brings both hope and hardship. ${gameState.windmillBuilt ? 'The windmill turns slowly in the breeze.' : 'The windmill construction site lies empty.'} The animals work with ${gameState.loyalty > 60 ? 'renewed hope' : 'quiet resignation'}.`,
+                Summer: `SUMMER, YEAR ${year}. The sun beats down on Animal Farm. ${gameState.security > 50 ? 'The dogs patrol the perimeter.' : 'The farm is quiet.'} Crops grow tall in the fields. ${gameState.loyalty > 70 ? 'The animals sing revolutionary songs as they work.' : 'Work continues in silence.'}`,
+                Autumn: `AUTUMN, YEAR ${year}. Leaves turn gold and red. The harvest is ${gameState.rations > 30 ? 'bountiful' : 'meager'}. ${gameState.historicalTruth > 60 ? "Old Major's words are remembered around the barn." : 'Memory fades with the seasons.'} ${gameState.purgesCompleted ? 'The memory of the purges hangs heavy in the air.' : ''}`,
+                Winter: `WINTER, YEAR ${year}. Cold grips Animal Farm. ${gameState.rations > 40 ? 'The stores are adequate.' : 'Hunger gnaws at empty stomachs.'} Snow covers the farm. ${gameState.security > 70 ? 'The dogs keep watch through the long nights.' : 'The animals huddle together for warmth.'} ${gameState.commandmentsRevised ? 'The Commandments wall shows signs of recent painting.' : ''}`
+            };
+            
+            if (narratives[season]) {
+                narrativeText.innerHTML = narratives[season];
+            }
+        }
+        
+        function showRandomCharacterDialogue() {
+            const characterDisplay = document.getElementById('character-display');
+            const characterText = document.getElementById('character-text');
+            
+            // Randomly show character dialogue
+            if (Math.random() < 0.3) { // 30% chance
+                const charNames = Object.keys(characters);
+                const randomChar = charNames[Math.floor(Math.random() * charNames.length)];
+                const character = characters[randomChar];
+                
+                const randomQuote = character.quotes[Math.floor(Math.random() * character.quotes.length)];
+                
+                characterDisplay.querySelector('.character-image').textContent = character.icon;
+                characterText.textContent = `"${randomQuote}"`;
+                characterDisplay.style.display = 'flex';
+            } else {
+                characterDisplay.style.display = 'none';
+            }
+        }
+        
+        function updateLog() {
+            const logContainer = document.getElementById('log-entries');
+            logContainer.innerHTML = '';
+            
+            // Show last 8 entries
+            const recentLogs = gameState.actionLog.slice(-8);
+            recentLogs.forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'log-entry';
+                div.textContent = entry;
+                logContainer.appendChild(div);
+            });
+            
+            // Scroll to bottom
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+        
+        function addToLog(message) {
+            gameState.actionLog.push(`Year ${gameState.year}, ${gameState.season}: ${message}`);
+            if (gameState.actionLog.length > 50) {
+                gameState.actionLog.shift();
+            }
+            updateLog();
+        }
+        
+        // Game Logic
+        function nextSeason() {
+            const currentIndex = seasonOrder.indexOf(gameState.season);
+            const nextIndex = (currentIndex + 1) % 4;
+            
+            gameState.season = seasonOrder[nextIndex];
+            gameState.turn++;
+            
+            // If we just finished Winter, advance year
+            if (gameState.season === 'Spring') {
+                gameState.year++;
+                gameState.turn = 1;
+            }
+            
+            // Apply seasonal effects
+            applySeasonalEffects();
+            
+            // Add to log
+            addToLog(`Season changed to ${gameState.season}`);
+            
+            // Clear current decision
+            clearDecision();
+            
+            updateUI();
+        }
+        
+        function applySeasonalEffects() {
+            switch (gameState.season) {
+                case 'Spring':
+                    gameState.rations = Math.max(0, gameState.rations - 8);
+                    gameState.loyalty = Math.max(0, gameState.loyalty - 1);
+                    break;
+                case 'Summer':
+                    gameState.rations = Math.max(0, gameState.rations - 5);
+                    gameState.loyalty = Math.max(0, gameState.loyalty - 2);
+                    break;
+                case 'Autumn':
+                    // Harvest gain
+                    const harvest = 20 + Math.floor(gameState.innovation / 5);
+                    gameState.rations = Math.min(100, gameState.rations + harvest);
+                    addToLog(`Harvest gathered: +${harvest} rations`);
+                    break;
+                case 'Winter':
+                    gameState.rations = Math.max(0, gameState.rations - 15);
+                    gameState.loyalty = Math.max(0, gameState.loyalty - 3);
+                    // Innovation affects winter survival
+                    if (gameState.innovation < 30) {
+                        gameState.rations = Math.max(0, gameState.rations - 5);
+                    }
+                    break;
+            }
+            
+            // Check for critical states
+            if (gameState.rations < 10) {
+                addToLog('CRITICAL: Animals are starving!');
+                gameState.loyalty = Math.max(0, gameState.loyalty - 10);
+            }
+            if (gameState.loyalty < 10) {
+                addToLog('CRITICAL: Animals are on the brink of rebellion!');
+            }
+            
+            // Historical Truth passive decay if Security high
+            if (gameState.security > 80) {
+                gameState.historicalTruth = Math.max(0, gameState.historicalTruth - 5);
+            }
+        }
+        
+        function checkEpochTriggers() {
+            // Don't trigger if we already have a decision
+            if (gameState.currentDecision) return;
+            
+            // Check each epoch
+            for (let epoch = 1; epoch <= 5; epoch++) {
+                const decisionKey = `epoch${epoch}`;
+                const decision = decisions[decisionKey];
+                
+                if (decision && 
+                    gameState.year === decision.year && 
+                    gameState.season === decision.season) {
+                    
+                    // Check if we've already completed this epoch
+                    if (epoch === 1 && gameState.windmillBuilt) continue;
+                    if (epoch === 2 && gameState.purgesCompleted) continue;
+                    if (epoch === 3 && gameState.commandmentsRevised) continue;
+                    if (epoch === 4 && (gameState.boxerSaved || gameState.boxerInjured)) continue;
+                    if (epoch === 5 && gameState.humanVisitors) continue;
+                    
+                    // Trigger the epoch
+                    triggerEpoch(epoch);
+                    break;
+                }
+            }
+            
+            // Check for seasonal decisions
+            if (!gameState.currentDecision && Math.random() < 0.4) {
+                const seasonalDecision = decisions.seasonal[gameState.season.toLowerCase()];
+                if (seasonalDecision) {
+                    showDecision(seasonalDecision);
+                }
+            }
+        }
+        
+        function triggerEpoch(epochNumber) {
+            gameState.currentEpoch = epochNumber;
+            const decisionKey = `epoch${epochNumber}`;
+            const decision = decisions[decisionKey];
+            
+            if (decision) {
+                showDecision(decision);
+                addToLog(`EPOCH ${epochNumber} triggered: ${decision.title}`);
+            }
+        }
+        
+        function showDecision(decision) {
+            gameState.currentDecision = decision;
+            
+            const decisionBox = document.getElementById('decision-box');
+            const decisionTitle = document.getElementById('decision-title');
+            const decisionDescription = document.getElementById('decision-description');
+            const decisionOptions = document.getElementById('decision-options');
+            
+            decisionTitle.textContent = decision.title;
+            decisionDescription.textContent = decision.description;
+            
+            // Clear previous options
+            decisionOptions.innerHTML = '';
+            
+            // Create option buttons
+            decision.options.forEach(option => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'decision-option';
+                optionDiv.onclick = () => makeDecision(option);
+                
+                let html = `<div class="decision-title">${option.title}</div>`;
+                html += `<div>${option.description}</div>`;
+                
+                // Add costs
+                if (option.costs) {
+                    html += '<div class="decision-costs">';
+                    for (const [metric, value] of Object.entries(option.costs)) {
+                        html += `<span class="cost">-${Math.abs(value)} ${metric}</span> `;
+                    }
+                    html += '</div>';
+                }
+                
+                // Add benefits
+                if (option.benefits) {
+                    html += '<div class="decision-benefits">';
+                    for (const [metric, value] of Object.entries(option.benefits)) {
+                        html += `<span class="benefit">+${value} ${metric}</span> `;
+                    }
+                    html += '</div>';
+                }
+                
+                // Check requirements
+                let available = true;
+                if (option.requirements) {
+                    for (const [metric, required] of Object.entries(option.requirements)) {
+                        if (gameState[metric] < required) {
+                            available = false;
+                            html += `<div class="cost">Requires ${metric} >= ${required}</div>`;
+                        }
+                    }
+                }
+                
+                if (!available) {
+                    optionDiv.style.opacity = '0.5';
+                    optionDiv.style.cursor = 'not-allowed';
+                    optionDiv.onclick = null;
+                }
+                
+                optionDiv.innerHTML = html;
+                decisionOptions.appendChild(optionDiv);
+            });
+            
+            // Show narrative about the decision
+            const narrativeText = document.getElementById('narrative-text');
+            narrativeText.innerHTML = `<strong>${decision.title}</strong><br><br>${decision.description}`;
+        }
+        
+        function clearDecision() {
+            gameState.currentDecision = null;
+            document.getElementById('decision-title').textContent = 'No decision pending';
+            document.getElementById('decision-description').textContent = '';
+            document.getElementById('decision-options').innerHTML = '';
+        }
+        
+        function makeDecision(option) {
+            if (!option) return;
+            
+            // Apply costs
+            if (option.costs) {
+                for (const [metric, value] of Object.entries(option.costs)) {
+                    if (metric === 'fatigue') continue; // Not tracked in simple version
+                    gameState[metric] = Math.max(0, Math.min(100, gameState[metric] + value));
+                }
+            }
+            
+            // Apply benefits
+            if (option.benefits) {
+                for (const [metric, value] of Object.entries(option.benefits)) {
+                    if (metric === 'fatigue') continue; // Not tracked in simple version
+                    gameState[metric] = Math.max(0, Math.min(100, gameState[metric] + value));
+                }
+            }
+            
+            // Handle special flags based on epoch
+            switch (gameState.currentEpoch) {
+                case 1:
+                    gameState.windmillBuilt = true;
+                    addToLog('Windmill construction completed.');
+                    break;
+                case 2:
+                    gameState.purgesCompleted = true;
+                    addToLog('Purges conducted.');
+                    break;
+                case 3:
+                    gameState.commandmentsRevised = true;
+                    addToLog('Commandments revised.');
+                    break;
+                case 4:
+                    if (option.id === 'save_rations' || option.id === 'save_loyalty') {
+                        gameState.boxerSaved = true;
+                        addToLog('Boxer saved.');
+                    } else if (option.id === 'sacrifice') {
+                        gameState.boxerInjured = true;
+                        addToLog('Boxer sent to the knacker\'s.');
+                    }
+                    break;
+                case 5:
+                    gameState.humanVisitors = true;
+                    addToLog('Trade deal made with humans.');
+                    break;
+            }
+            
+            // Add narrative
+            if (option.narrative) {
+                const narrativeText = document.getElementById('narrative-text');
+                narrativeText.innerHTML = option.narrative;
+            }
+            
+            addToLog(`Decision made: ${option.title}`);
+            
+            // Clear decision
+            clearDecision();
+            gameState.currentEpoch = 0;
+            
+            updateUI();
+        }
+        
+        function skipToEpoch(epochNumber) {
+            // Set year and season to trigger the epoch
+            const decision = decisions[`epoch${epochNumber}`];
+            if (decision) {
+                gameState.year = decision.year;
+                gameState.season = decision.season;
+                triggerEpoch(epochNumber);
+                updateUI();
+            }
+        }
+        
+        function checkEndgame() {
+            if (gameState.year === 6 && gameState.season === 'Winter') {
+                determineEnding();
+            } else {
+                alert(`Not yet at endgame. Currently: Year ${gameState.year}, ${gameState.season}. Endgame triggers at Year 6, Winter.`);
+            }
+        }
+        
+        function determineEnding() {
+            let ending = '';
+            let title = '';
+            let text = '';
+            
+            // Check ending conditions in order of priority
+            if (gameState.loyalty > 85 && gameState.corruption < 10 && 
+                gameState.historicalTruth > 70 && gameState.boxerSaved) {
+                // 1. THE UTOPIA
+                ending = 'UTOPIA';
+                title = 'The Utopia';
+                text = 'The animals gather in the barn, not out of fear, but purpose. Hidden records are produced - Old Major\'s original speech, the true Commandments, accounts of every betrayal. Napoleon and his pigs are surrounded, not by dogs, but by truth. A new constitution is written, with checks and balances, with education for all, with Boxer - recovered and revered - as its guardian. The windmill turns, generating light and hope. The farm is truly, finally, of the animals, by the animals, for the animals. Old Major\'s dream lives.';
+            } else if (gameState.corruption > 90 && gameState.security > 80) {
+                // 2. THE CYCLE OF TYRANNY
+                ending = 'CYCLE_OF_TYRANNY';
+                title = 'The Cycle of Tyranny';
+                text = 'You stand at the farmhouse window, glass of whiskey in hoof, watching the animals shuffle to their cold sheds. Napoleon toasts you. "To leadership," he slurs. Through the window, your reflection shows not a pig, but something worse - a pig in clothes, walking on two legs, indistinguishable from the men you overthrew. The dogs whine at your feet. The Commandments wall has only one rule now: "ALL ANIMALS ARE EQUAL, BUT SOME ANIMALS ARE MORE EQUAL THAN OTHERS." The revolution has eaten its children. You are what you destroyed.';
+            } else if (gameState.loyalty < 20 && gameState.rations < 20 && gameState.innovation < 30) {
+                // 3. THE STAGNATION
+                ending = 'STAGNATION';
+                title = 'The Stagnation';
+                text = 'The farm lies in ruins. The windmill is a skeleton. The fields are weeds. The animals are too weak to rebel, too hopeless to care. You call the humans back. They arrive with chains and whips, but also with food. "Animals need masters," Jones says, counting the purchase money. As the humans retake the farmhouse, you realize: you failed not from malice, but from incompetence. The revolution died from a thousand small failures. The pigs join the humans at the table. The other animals return to their stalls. Nothing has changed. Nothing will.';
+            } else if (!gameState.boxerSaved && gameState.loyalty > 70 && gameState.corruption < 30) {
+                // 4. THE MARTYR\'S REVOLT
+                ending = 'MARTYR_REVOLT';
+                title = 'The Martyr\'s Revolt';
+                text = 'You stand before the animals, the truth spilling from you like blood. Every lie, every betrayal, every commandment changed in the night. The dogs turn on you. Napoleon screams treason. As the teeth sink in, you see Boxer\'s loyal, confused face in the crowd. You failed him. But maybe your death will mean something. The animals rise. The farmhouse burns. Napoleon\'s screams join yours. When it\'s over, the survivors stand in the wreckage, free but leaderless, victorious but empty. What now? The revolution continues. Without you.';
+            } else {
+                // 5. THE COMPROMISED SURVIVAL (Default)
+                ending = 'COMPROMISED_SURVIVAL';
+                title = 'The Compromised Survival';
+                text = 'Napoleon is gone, exiled by a coalition of tired animals and disillusioned pigs. You remain, not as a hero, but as the least terrible option. The farm survives. Barely. The debts to human traders will take years to repay. The animals work without inspiration, following rules they don\'t believe in. The Commandments are a patchwork of original ideals and practical compromises. The windmill works, but no one cheers when it turns. You won. Sort of. The revolution is safe. And hollow. The future is uncertain. But there is a future. For now, that must be enough.';
+            }
+            
+            // Show ending modal
+            document.getElementById('endgame-title').textContent = title;
+            document.getElementById('endgame-text').textContent = text;
+            document.getElementById('endgame-modal').classList.remove('hidden');
+            
+            addToLog(`ENDGAME: ${title} ending achieved.`);
+        }
+        
+        function hideEndgame() {
+            document.getElementById('endgame-modal').classList.add('hidden');
+        }
+        
+        function resetGame() {
+            if (confirm('Reset the game to the beginning? All progress will be lost.')) {
+                // Reset all metrics
+                gameState.loyalty = 75;
+                gameState.rations = 50;
+                gameState.security = 30;
+                gameState.corruption = 5;
+                gameState.innovation = 10;
+                gameState.historicalTruth = 95;
+                
+                // Reset time
+                gameState.season = 'Spring';
+                gameState.year = 1;
+                gameState.turn = 1;
+                gameState.currentEpoch = 0;
+                
+                // Reset flags
+                gameState.boxerSaved = false;
+                gameState.boxerInjured = false;
+                gameState.commandmentsRevised = false;
+                gameState.purgesCompleted = false;
+                gameState.windmillBuilt = false;
+                gameState.humanVisitors = false;
+                gameState.currentDecision = null;
+                
+                // Reset log
+                gameState.actionLog = ['Year 1, Spring: Revolution begins. The animals have taken control of Manor Farm.'];
+                
+                // Clear decision display
+                clearDecision();
+                
+                addToLog('Game reset to beginning');
+                updateUI();
+            }
+        }
+        
+        // Initialize
+        updateUI();
+        console.log('Animal Farm Complete Test Game Ready!');
+        console.log('All 5 Epochs Available:');
+        console.log('1. Year 1 Spring: Windmill Debate');
+        console.log('2. Year 2 Autumn: Purges & Show Trials');
+        console.log('3. Year 3 Summer: Commandment Revision');
+        console.log('4. Year 4 Summer: Boxer\'s Fate');
+        console.log('5. Year 5 Winter: Human Visitors');
+    </script>
+</body>
+</html>
